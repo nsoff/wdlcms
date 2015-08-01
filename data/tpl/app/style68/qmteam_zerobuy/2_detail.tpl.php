@@ -1,0 +1,205 @@
+<?php defined('IN_IA') or exit('Access Denied');?>﻿<head>
+	<title>活动详情 - <?php  echo $_W['account']['name'];?></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- Mobile Devices Support @begin -->
+	<meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type">
+	<meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+	<meta content="no-cache" http-equiv="pragma">
+	<meta content="0" http-equiv="expires">
+	<meta content="telephone=no, address=no" name="format-detection">
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes"> <!-- apple devices fullscreen -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<!-- Mobile Devices Support @end -->
+    <link href="<?php echo MODULE_URL;?>images/style.css" type="text/css" rel="stylesheet" >
+	<link href="<?php echo MODULE_URL;?>js/bootstrap3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="resource/css/font-awesome.min.css" rel="stylesheet">
+	<script type='text/javascript' src="resource/js/lib/jquery-1.11.1.min.js"></script>
+	<script type='text/javascript' src='<?php echo MODULE_URL;?>js/bootstrap3.3/js/bootstrap.min.js'></script>
+	<script type='text/javascript' src='<?php echo MODULE_URL;?>js/common.js'></script>
+	<style>
+	.btn-confirm,.forward-uc{display:none}
+	</style>
+</head>
+<body>
+<script>
+$(function(){
+setInterval(function(){plus_time_char()},1000);
+});
+</script>
+<button type="button" class="btn btn-primary btn-share" data-dismiss="modal" style="position:absolute;top:10px;right:10px;">分享</button>
+<div class="content group-info">
+    <div class="info">
+        <img src="<?php  echo $_W['attachurl'];?><?php  echo $info['thumb'];?>">
+    </div>
+    <div class="cost-box">
+       <div class="buy-box">
+           <div class="price">¥</div>
+           <div class="price sum"><?php  echo $info['zerobuy_price'];?></div>
+          <div class="past Fix">
+            <div class="t">
+            <span class="o-price">¥<?php  echo $info['price'];?></span>
+            <br>
+                <span class="promo-tag ri">
+                    <strong>原价</strong>
+                </span>
+            </div>
+          </div>
+         <div class="last">
+            <a <?php  if($btn_info=='立即参与') { ?>class="btn btn-primary join"<?php  } else { ?>class="buy-btn"<?php  } ?>>
+			  <?php  echo $btn_info;?>
+			</a>
+        </div>
+       </div>
+	   <div class="plus_time">
+		  <?php  if($btn_info=='即将开始') { ?><div class="brandtime" data-l="<?php  echo $info['starttime'];?>" style="float:left;"></div>
+			   <?php  } else { ?>
+			   <div class="brandtime" data-l="<?php  echo $info['endtime'];?>" style="float:left;"></div>
+		  <?php  } ?>
+		  
+		  
+		  <div style="float:right;margin-right:15px;">已参与<?php  echo $info['join_num'];?>次</div>
+	   </div>
+	   <div class="intro">
+            <h3><?php  echo $info['title'];?></h3>
+            <p></p>
+        </div>
+    </div>
+</div><!-- 
+<a href="http://demo.open.weixin.qq.com/jssdk/#menu-share">test</a> -->
+<?php  if($info['status'] == 4) { ?>
+<div class="detail-info group-detail">
+    <div class="con">
+            <div class="info Fix">
+                <div class="detail-box"><h3 class="tit">中奖情况</h3>
+                <div class="detail-tit"><?php  echo $info['title'];?> 中奖公告</div>
+	                <div>
+	                      <p>中奖者手机：<?php  echo substr($member_info['mobile'],0,3).'****'.substr($member_info['mobile'],7,4)?></p>
+	                      <p>开奖号码：<?php  echo $info['draw_code'];?></p>
+	                      <p>中奖号码：<?php  echo $info['win_code'];?></p>
+	                </div>
+                </div>
+            </div>
+
+    </div>
+</div>
+<?php  } ?>
+<div class="detail-info group-detail">
+    <div class="con">
+            <div class="info Fix">
+                <div class="detail-box" style="margin-right:13px;"><h3 class="tit">规则详情</h3>
+                <div class="detail-tit"><?php  echo $info['rule_title'];?></div>
+                <div><?php  echo htmlspecialchars_decode($info['rule']);?></div>
+                </div>
+            </div>
+
+    </div>
+</div>
+<div class="detail-info group-detail">
+    <div class="con">
+            <div class="info Fix">
+                <div class="detail-box" style="margin-right:13px;"><h3 class="tit">产品详情</h3>
+                <div class="detail-tit"><?php  echo $info['goods_title'];?></div>
+                <div><?php  echo htmlspecialchars_decode($info['info']);?></div>
+                </div>
+            </div>
+
+    </div>
+</div>
+<!-- UY BEGIN -->
+<div id="uyan_frame" style="margin:10px;"></div>
+<?php  if(!empty($modules['qmteam_zerobuy']['config']['uyan'])) { ?>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=<?php  echo $modules['qmteam_zerobuy']['config']['uyan'];?>"></script>
+<?php  } ?>
+<!-- UY END -->
+
+<div class="foot_bg">
+</div>
+
+<div class="footerbar">
+	<a href="<?php  echo $this->createMobileUrl('usercode')?>"><i class="fa fa-gift"></i> 抽奖码</a>
+	<a href="javascript:void(0)" class="credit"><i class="fa fa-shopping-cart"></i> 积分兑换</a>
+</div>
+<!-- Button trigger modal -->
+
+<script>
+$(function(){
+	$('.join').click(function(){
+		$.get("<?php  echo $this->createMobileUrl('join', array('id' => $info['id'],'act'=>'join'))?>",
+		   function(data){//alert(data.url+data.act);
+			   if(data.info == 'success'){
+				   $('.modal-title').html('抽奖信息');
+				   $('.btn-confirm').css('display','inline-block');
+			       $('.modal-body').html(data.msg);
+			       $('.last').html('<a href="#" class="buy-btn">已参与</a>');
+			       $('#myModal').modal('show');
+			   }else if(data.info == 'uc'){
+				   $('.forward-uc').css('display','inline-block');
+				   $('.modal-body').html(data.msg);
+			       $('#myModal').modal('show');
+			   }else if(data.info == 'redirect'){
+				   $('.btn-confirm').css('display','inline-block');
+				   $('.modal-body').html("本活动需要关注公众号后参加，<br />3秒后跳转到关注引导页");
+			       $('#myModal').modal('show');
+			       window.setTimeout(function(){window.location.href=data.msg},3000); 
+			   }else{
+				   $('.btn-confirm').css('display','inline-block');
+				   $('.modal-body').html(data.msg);
+			       $('#myModal').modal('show');
+			   }
+		   },'json');
+		});
+	$('.credit').click(function(){
+		$.get("<?php  echo $this->createMobileUrl('credit', array('id' => $info['id'],'act'=>'exchange'))?>",
+		   function(data){
+			   if(data.info == 'success'){
+				   $('.modal-title').html('兑换信息');
+				   $('.btn-confirm').css('display','inline-block');	
+				   $('.modal-body').html(data.msg);
+			       $('#myModal').modal('show');	       
+			   }else if(data.info == 'uc'){
+				   $('.forward-uc').css('display','inline-block');
+				   $('.modal-body').html(data.msg);
+			       $('#myModal').modal('show');
+			   }else if(data.info == 'redirect'){
+				   $('.btn-confirm').css('display','inline-block');
+				   $('.modal-body').html("本活动需要关注公众号后参加，<br />3秒后跳转到关注引导页");
+		       	   $('#myModal').modal('show');
+				   window.setTimeout(function(){window.location.href=data.msg},3000);
+			   }else{
+				   $('.btn-confirm').css('display','inline-block');
+				   $('.modal-body').html(data.msg);
+			       $('#myModal').modal('show');
+			   }
+		   },'json');
+		});
+	$('.forward-uc').click(function(){
+			window.location.href="<?php  echo $_W['siteroot'];?>app/index.php?i=<?php  echo $_W['weid'];?>&c=mc";
+		});
+
+});
+</script>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary forward-uc" >完善资料</button>
+        <button type="button" class="btn btn-primary btn-confirm" data-dismiss="modal">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mask_bg" style="display:none;">
+   <img src='<?php echo MODULE_URL;?>images/img.png' />
+   <div  class="mask_lay"></div>
+</div>
+</body>
